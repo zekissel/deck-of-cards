@@ -45,21 +45,21 @@ public class DeckOfCards {
 	public void goBack () {
 		if (currentPosition > 0) {		//standard case
 			currentPosition--;
-			currCard.setIcon(new ImageIcon("cards\\" + deck[currentPosition] + ".jpg"));
+			currCard.setIcon(new ImageIcon("../src/cards/" + deck[currentPosition] + ".jpg"));
 			nextCard.setText(Integer.toString(51 - currentPosition) + " >");
 			prevCard.setText("< " + Integer.toString(currentPosition + 1));
 			printCard();
 		}
 		else if (currentPosition == 0) {	//looking at first card -> go to face design
 			currentPosition--;
-			currCard.setIcon(new ImageIcon("cards\\face.jpg"));
+			currCard.setIcon(new ImageIcon("../src/cards/face.jpg"));
 			nextCard.setText("52 >");
 			prevCard.setText("< 0");
 		}
 		else {
 			if (seenDeck) {		//if already looking at face design, and flipped through once
 				currentPosition = 51;
-				currCard.setIcon(new ImageIcon("cards\\" + deck[currentPosition] + ".jpg"));
+				currCard.setIcon(new ImageIcon("../src/cards/" + deck[currentPosition] + ".jpg"));
 				printCard();
 				nextCard.setText("0 >");
 				prevCard.setText("< 52");
@@ -73,7 +73,7 @@ public class DeckOfCards {
 	public void drawOne () {
 		if (currentPosition < 51) {		//standard case
 			currentPosition++;
-			currCard.setIcon(new ImageIcon("cards/" + deck[currentPosition] + ".jpg"));
+			currCard.setIcon(new ImageIcon("../src/cards/" + deck[currentPosition] + ".jpg"));
 			nextCard.setText(Integer.toString(51 - currentPosition) + " >");
 			prevCard.setText("< " + Integer.toString(currentPosition + 1));
 			printCard();
@@ -81,7 +81,7 @@ public class DeckOfCards {
 		else {			//drawing one while on last card (deck[51])
 			seenDeck = true;
 			currentPosition = -1;
-			currCard.setIcon(new ImageIcon("cards\\last.jpg"));
+			currCard.setIcon(new ImageIcon("../src/cards/last.jpg"));
 			nextCard.setText("52 >");
 			prevCard.setText("< 0");
 		}
@@ -89,7 +89,7 @@ public class DeckOfCards {
 	
 	public void shuffleDeck() {
 		currentPosition = -1;			//reset global variables and JFrame UI
-		currCard.setIcon(new ImageIcon("cards\\face.jpg"));
+		currCard.setIcon(new ImageIcon("../src/cards/face.jpg"));
 		seenDeck = false;
 		nextCard.setText("52 >");
 		prevCard.setText("< 0");
@@ -111,7 +111,7 @@ public class DeckOfCards {
 		}
 		fillDeck();
 		currentPosition = -1;
-		currCard.setIcon(new ImageIcon("cards\\face.jpg"));
+		currCard.setIcon(new ImageIcon("../src/cards/face.jpg"));
 		nextCard.setText("52 >");
 		prevCard.setText("< 0");
 	}
@@ -148,9 +148,9 @@ public class DeckOfCards {
 		prevCard.addActionListener(e -> goBack());
 		
 		if (currentPosition == -1) {
-			currCard.setIcon(new ImageIcon("cards\\face.jpg"));			//face is not part of deck[]
+			currCard.setIcon(new ImageIcon("../src/cards/face.jpg"));			//face is not part of deck[]
 		} else {
-			currCard.setIcon(new ImageIcon("cards\\" + deck[currentPosition] + ".jpg"));
+			currCard.setIcon(new ImageIcon("../src/cards/" + deck[currentPosition] + ".jpg"));
 		}
 		currCard.setBounds(1,1,270,360);
 		currCard.addActionListener(e -> drawOne());
@@ -172,7 +172,7 @@ public class DeckOfCards {
 		cardFrame.add(cardPanel);
 		cardFrame.setVisible(true);
 
-		Image icon = Toolkit.getDefaultToolkit().getImage("cards\\icon.jpg");
+		Image icon = Toolkit.getDefaultToolkit().getImage("../src/cards/icon.jpg");
 		cardFrame.setIconImage(icon);
 	}
 	
@@ -185,34 +185,36 @@ public class DeckOfCards {
 	}
 	
 	private String suitSwitch (int index) {		//used in fillDeck()
-		String suit = "N";
-		switch (index) {
-			case 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12: suit = "C"; break;
-			case 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25: suit = "D"; break;
-			case 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38: suit = "H"; break;
-			case 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51: suit = "S"; break;
-		}
-		return suit;
+
+		index -= 13;
+		if (index < 0) return "C";
+
+		index -= 13;
+		if (index < 0) return "D";
+
+		index -= 13;
+		if (index < 0) return "H";
+
+		return "S";
 	}
 	
 	private String rankSwitch (int index) {		//used in fillDeck()
-		String rank = "0";
-		switch (index) {
-			case 0, 13, 26, 39: rank = "A"; break;
-			case 1, 14, 27, 40: rank = "2"; break;
-			case 2, 15, 28, 41: rank = "3"; break;
-			case 3, 16, 29, 42: rank = "4"; break;
-			case 4, 17, 30, 43: rank = "5"; break;
-			case 5, 18, 31, 44: rank = "6"; break;
-			case 6, 19, 32, 45: rank = "7"; break;
-			case 7, 20, 33, 46: rank = "8"; break;
-			case 8, 21, 34, 47: rank = "9"; break;
-			case 9, 22, 35, 48: rank = "0"; break;
-			case 10, 23, 36, 49: rank = "J"; break;
-			case 11, 24, 37, 50: rank = "Q"; break;
-			case 12, 25, 38, 51: rank = "K"; break;
+		switch (index % 13) {
+			case 0: return "2";
+			case 1: return "2";
+			case 2: return "3";
+			case 3: return "4";
+			case 4: return "5";
+			case 5: return "6";
+			case 6: return "7";
+			case 7: return "8";
+			case 8: return "9";
+			case 9: return "0";
+			case 10: return "J";
+			case 11: return "Q";
+			case 12: return "K";
+			default: return "0";
 		}
-		return rank;
 	}
 	
 	private void printCard () {			//to display cards in terminal more nicely
